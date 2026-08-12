@@ -1,0 +1,11 @@
+# Build artifacts
+[Bb]in/
+[Oo]bj/
+
+# IDE / user-specific
+*.DotSettings.user
+*.user
+.idea/
+
+# OS
+.DS_Store
