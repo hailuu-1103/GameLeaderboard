@@ -1,0 +1,90 @@
+@baseUrl = http://localhost:5114
+
+### Get top leaderboard
+GET {{baseUrl}}/api/leaderboards/classic/top?limit=2
+Accept: application/json
+
+### Invalid limit: lower boundary
+GET {{baseUrl}}/api/leaderboards/classic/top?limit=0
+Accept: application/problem+json
+
+### Invalid limit: upper boundary
+GET {{baseUrl}}/api/leaderboards/classic/top?limit=101
+Accept: application/problem+json
+
+### Unknown leaderboard
+GET {{baseUrl}}/api/leaderboards/unknown/top
+Accept: application/problem+json
+
+### Unknown player
+GET {{baseUrl}}/api/leaderboards/classic/players/unknown
+Accept: application/problem+json
+
+### Valid score
+POST {{baseUrl}}/api/leaderboards/classic/scores
+Content-Type: application/json
+
+{
+  "playerName": "David",
+  "score": 13000
+}
+
+### Empty player name
+POST {{baseUrl}}/api/leaderboards/classic/scores
+Content-Type: application/json
+
+{
+  "playerName": "",
+  "score": 13000
+}
+
+### Negative score
+POST {{baseUrl}}/api/leaderboards/classic/scores
+Content-Type: application/json
+
+{
+  "playerName": "David",
+  "score": -1
+}
+
+### Unknown route
+GET {{baseUrl}}/api/does-not-exist
+Accept: application/problem+json
+
+### Malformed JSON
+POST {{baseUrl}}/api/leaderboards/classic/scores
+Content-Type: application/json
+
+{
+  "playerName": "David",
+  "score": 13000
+}
+
+
+### Missing body
+POST {{baseUrl}}/api/leaderboards/classic/scores
+Content-Type: application/json
+
+
+### Submit to unknown leaderboard
+POST {{baseUrl}}/api/leaderboards/unknown/scores
+Content-Type: application/json
+
+{
+  "playerName": "David",
+  "score": 13000
+}
+
+
+### Unsupported HTTP method
+PUT {{baseUrl}}/api/leaderboards/classic/top
+Accept: application/problem+json
+
+### Whitespace-only player name
+POST {{baseUrl}}/api/leaderboards/classic/scores
+Content-Type: application/json
+
+{
+  "playerName": "   ",
+  "score": 100
+}
