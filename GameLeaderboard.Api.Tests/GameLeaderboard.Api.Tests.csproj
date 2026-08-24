@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GameLeaderboard.Api\GameLeaderboard.Api.csproj" />
+    <ProjectReference Include="..\GameLeaderboard.Domain\GameLeaderboard.Domain.csproj" />
   </ItemGroup>
 
 </Project>
