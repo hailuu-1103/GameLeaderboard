@@ -16,7 +16,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 public sealed class LeaderboardsApiTests : IDisposable
 {
     private readonly LeaderboardApiFactory factory;
-    private readonly HttpClient            client;
+    private readonly HttpClient client;
 
     public LeaderboardsApiTests()
     {
@@ -25,7 +25,7 @@ public sealed class LeaderboardsApiTests : IDisposable
         this.client = this.factory.CreateClient(
             new WebApplicationFactoryClientOptions
             {
-                BaseAddress       = new Uri("https://localhost"),
+                BaseAddress = new Uri("https://localhost"),
                 AllowAutoRedirect = false,
             });
     }
@@ -138,7 +138,7 @@ public sealed class LeaderboardsApiTests : IDisposable
         using var client = failureFactory.CreateClient(
             new()
             {
-                BaseAddress       = new("https://localhost"),
+                BaseAddress = new("https://localhost"),
                 AllowAutoRedirect = false,
             });
 
@@ -181,7 +181,7 @@ public sealed class LeaderboardsApiTests : IDisposable
     #region Get Player
 
     [Fact]
-    public async Task GetPlayers_WhenPlayerNameIsInvalid_ReturnsValidationProblem()
+    public async Task GetPlayer_WhenPlayerDoesNotExist_ReturnsNotFoundProblem()
     {
         using var response = await this.client.GetAsync(
             "/api/leaderboards/classic/player?name=unknown");
@@ -205,7 +205,7 @@ public sealed class LeaderboardsApiTests : IDisposable
     }
 
     [Fact]
-    public async Task GetPlayers_WhenPlayerNameIsWhiteSpaceOnly_ReturnsValidationProblem()
+    public async Task GetPlayer_WhenPlayerNameIsEmpty_ReturnsNotFoundProblem()
     {
         using var response = await this.client.GetAsync(
             "/api/leaderboards/classic/player?name=");
@@ -230,7 +230,7 @@ public sealed class LeaderboardsApiTests : IDisposable
 
     #endregion
 
-    #region Submit score
+    #region Submit Score
 
     [Fact]
     public async Task SubmitScore_WhenPlayerIsNew_CanBeRetrievedAfterward()

@@ -5,19 +5,19 @@ namespace GameLeaderboard.Domain.Season;
 
 public sealed class Season
 {
-    public SeasonId       Id            { get; }
-    public LeaderboardId  LeaderboardId { get; }
-    public DateTimeOffset StartsAt      { get; }
-    public DateTimeOffset EndsAt        { get; }
-    public SeasonStatus   Status        { get; private set; }
+    public SeasonId Id { get; }
+    public LeaderboardId LeaderboardId { get; }
+    public DateTimeOffset StartsAt { get; }
+    public DateTimeOffset EndsAt { get; }
+    public SeasonStatus Status { get; private set; }
 
     private Season(SeasonId id, LeaderboardId leaderboardId, DateTimeOffset startsAt, DateTimeOffset endsAt, SeasonStatus status)
     {
-        this.Id            = id;
+        this.Id = id;
         this.LeaderboardId = leaderboardId;
-        this.StartsAt      = startsAt;
-        this.EndsAt        = endsAt;
-        this.Status        = status;
+        this.StartsAt = startsAt;
+        this.EndsAt = endsAt;
+        this.Status = status;
     }
 
     public static Season Create(SeasonId id, LeaderboardId leaderboardId, DateTimeOffset startsAt, DateTimeOffset endsAt)
@@ -25,7 +25,7 @@ public sealed class Season
         // Validate schedule.
         if (startsAt >= endsAt)
         {
-            throw new DomainRuleViolationException("season-invalid-time","Start time must be smaller than end time");
+            throw new DomainRuleViolationException("season-invalid-time", "Start time must be smaller than end time");
         }
 
         return new Season(id, leaderboardId, startsAt, endsAt, SeasonStatus.Scheduled);
@@ -33,9 +33,18 @@ public sealed class Season
 
     public void Activate(DateTimeOffset now)
     {
-        // Protect Scheduled → Active transition.
-        if (this.Status != SeasonStatus.Scheduled) return;
-        if (now < this.StartsAt || now > this.EndsAt) return;
+        if (this.Status == SeasonStatus.Closed)
+        {
+            throw new DomainRuleViolationException("closed-season-reopening-rule",
+                "Closed season can not be reopened.");
+        }
+        if (this.Status == SeasonStatus.Active)
+        {
+            throw new DomainRuleViolationException("active-season-reopening-rule",
+                "Active season can not be reactivated.");
+        }
+
+        if (now < this.StartsAt || now >= this.EndsAt) return;
         this.Status = SeasonStatus.Active;
     }
 
@@ -49,7 +58,11 @@ public sealed class Season
     public void Close(DateTimeOffset now)
     {
         // Protect Active → Closed transition.
-        if (this.Status != SeasonStatus.Active) return;
+        if (this.Status != SeasonStatus.Active)
+        {
+            throw new DomainRuleViolationException("season-not-active",
+                "Only an active season can be closed.");
+        }
         this.Status = SeasonStatus.Closed;
     }
 }

@@ -1,4 +1,4 @@
-using GameLeaderboard.Domain.Scores;
+namespace GameLeaderboard.Domain.Scores;
 
 public sealed record ScoreSubmissionDecision(
     Score SubmittedScore,

@@ -1,6 +1,7 @@
+namespace GameLeaderboard.Domain.Scores;
+
 using GameLeaderboard.Domain.Common;
-using GameLeaderboard.Domain.Scores;
-using GameLeaderboard.Domain.Season;
+using Season = GameLeaderboard.Domain.Season.Season;
 
 public sealed class ScoreSubmissionPolicy
 {
