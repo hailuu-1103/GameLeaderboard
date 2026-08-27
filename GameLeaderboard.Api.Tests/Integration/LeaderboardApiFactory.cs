@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace GameLeaderboard.Api.Tests.Integration;
+namespace GameLeaderboard.API.Tests.Integration;
 
 public sealed class LeaderboardApiFactory
     : WebApplicationFactory<Program>

@@ -22,7 +22,7 @@ The run command starts the development API at `http://localhost:5114` (and, with
 
 ## Coding Style & Naming Conventions
 
-Use four-space indentation and standard modern C# conventions. Prefer file-scoped namespaces, nullable-aware code, primary constructors where they improve clarity, and small immutable records for request/response or value types. Use `PascalCase` for types, methods, and public members; use `camelCase` for parameters, locals, and private fields. Existing classes qualify instance fields with `this.`. Keep namespaces under `GameLeaderboard.Api` or `GameLeaderboard.Domain` and group new files by feature.
+Use four-space indentation and standard modern C# conventions. Prefer file-scoped namespaces, nullable-aware code, primary constructors where they improve clarity, and small immutable records for request/response or value types. Use `PascalCase` for types, methods, and public members; use `camelCase` for parameters, locals, and private fields. Existing classes qualify instance fields with `this.`. Keep namespaces under `GameLeaderboard.API` or `GameLeaderboard.Domain` and group new files by feature.
 
 ## Testing Guidelines
 

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Diagnostics;
 
-namespace GameLeaderboard.Api.ErrorHandling;
+namespace GameLeaderboard.API.ErrorHandling;
 
 public sealed class GlobalExceptionHandler(
     ILogger<GlobalExceptionHandler> logger,

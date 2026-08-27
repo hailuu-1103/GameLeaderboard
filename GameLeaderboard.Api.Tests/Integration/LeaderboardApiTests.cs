@@ -1,17 +1,20 @@
 using System.Net.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace GameLeaderboard.Api.Tests.Integration;
+namespace GameLeaderboard.API.Tests.Integration;
 
 using System.Net;
 using System.Net.Http.Json;
 using System.Text;
-using GameLeaderboard.Api.Controllers;
-using GameLeaderboard.Api.Services;
+using GameLeaderboard.API.Contracts.Leaderboards;
+using GameLeaderboard.API.Contracts.Scores;
+using GameLeaderboard.API.Controllers;
+using GameLeaderboard.Application.Abstractions.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using SubmitScoreRequest = GameLeaderboard.API.Contracts.Scores.SubmitScoreRequest;
 
 public sealed class LeaderboardsApiTests : IDisposable
 {
@@ -48,18 +51,18 @@ public sealed class LeaderboardsApiTests : IDisposable
         // Assert: JSON contract
         var body =
             await response.Content
-                .ReadFromJsonAsync<TopLeaderboardResponse>();
+                .ReadFromJsonAsync<GetTopLeaderboardResponse>();
 
         Assert.NotNull(body);
         Assert.Equal("classic", body.LeaderboardId);
         Assert.Equal(2, body.Entries.Count);
 
-        Assert.Equal("Hai", body.Entries[0].PlayerName);
-        Assert.Equal(15_000, body.Entries[0].Score);
+        Assert.Equal("Bob", body.Entries[0].PlayerName);
+        Assert.Equal(20_000, body.Entries[0].Score);
         Assert.Equal(1, body.Entries[0].Rank);
 
-        Assert.Equal("Alice", body.Entries[1].PlayerName);
-        Assert.Equal(12_000, body.Entries[1].Score);
+        Assert.Equal("Hai", body.Entries[1].PlayerName);
+        Assert.Equal(15_000, body.Entries[1].Score);
         Assert.Equal(2, body.Entries[1].Rank);
     }
 
@@ -82,14 +85,16 @@ public sealed class LeaderboardsApiTests : IDisposable
 
         var problem =
             await response.Content
-                .ReadFromJsonAsync<ValidationProblemDetails>();
+                .ReadFromJsonAsync<ProblemDetails>();
 
         Assert.NotNull(problem);
         Assert.Equal(400, problem.Status);
-        Assert.Contains("limit", problem.Errors);
-        Assert.Contains(
+        Assert.Equal(
+            "urn:game-leaderboard:errors:limit-out-of-range",
+            problem.Type);
+        Assert.Equal(
             "Limit must be between 1 and 100.",
-            problem.Errors["limit"]);
+            problem.Detail);
 
         Assert.True(
             problem.Extensions.ContainsKey("traceId"));
@@ -112,7 +117,7 @@ public sealed class LeaderboardsApiTests : IDisposable
 
         var body =
             await response.Content
-                .ReadFromJsonAsync<TopLeaderboardResponse>();
+                .ReadFromJsonAsync<GetTopLeaderboardResponse>();
 
         Assert.NotNull(body);
         Assert.Equal("classic", body.LeaderboardId);
@@ -120,18 +125,18 @@ public sealed class LeaderboardsApiTests : IDisposable
     }
 
     [Fact]
-    public async Task GetTop_WhenServiceThrows_ReturnsSanitizedProblemDetails()
+    public async Task GetTop_WhenQueryThrows_ReturnsSanitizedProblemDetails()
     {
         await using var failureFactory =
             this.factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.RemoveAll<ILeaderboardService>();
+                    services.RemoveAll<ILeaderboardQueries>();
 
                     services.AddSingleton<
-                        ILeaderboardService,
-                        ThrowingLeaderboardService>();
+                        ILeaderboardQueries,
+                        ThrowingLeaderboardQueries>();
                 });
             });
 
@@ -153,7 +158,7 @@ public sealed class LeaderboardsApiTests : IDisposable
             await response.Content.ReadAsStringAsync();
 
         Assert.DoesNotContain(
-            ThrowingLeaderboardService.SENSITIVE_MESSAGE,
+            ThrowingLeaderboardQueries.SENSITIVE_MESSAGE,
             responseJson);
 
         Assert.DoesNotContain(
@@ -249,20 +254,24 @@ public sealed class LeaderboardsApiTests : IDisposable
             submitResponse.StatusCode);
 
         using var getResponse = await this.client.GetAsync(
-            "/api/leaderboards/classic/player/David");
+            "/api/leaderboards/classic/top");
 
         Assert.Equal(
             HttpStatusCode.OK,
             getResponse.StatusCode);
 
-        var player =
+        var leaderboard =
             await getResponse.Content
-                .ReadFromJsonAsync<PlayerResponse>();
+                .ReadFromJsonAsync<GetTopLeaderboardResponse>();
 
+        Assert.NotNull(leaderboard);
+        var player = Assert.Single(
+            leaderboard.Entries,
+            entry => entry.PlayerName == "David");
         Assert.NotNull(player);
         Assert.Equal("David", player.PlayerName);
         Assert.Equal(13_000, player.Score);
-        Assert.Equal(2, player.Rank);
+        Assert.Equal(3, player.Rank);
     }
 
     [Fact]
@@ -293,6 +302,53 @@ public sealed class LeaderboardsApiTests : IDisposable
 
         Assert.NotNull(problem);
         Assert.Equal(400, problem.Status);
+        Assert.True(
+            problem.Extensions.ContainsKey("traceId"));
+    }
+
+    [Fact]
+    public async Task SubmitScore_WhenNoCurrentSeason_ReturnsConflict()
+    {
+        await using var noCurrentSeasonFactory =
+            this.factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.RemoveAll<TimeProvider>();
+                    services.AddSingleton<TimeProvider>(
+                        new FixedTimeProvider(
+                            new DateTimeOffset(
+                                2026,
+                                10,
+                                1,
+                                0,
+                                0,
+                                0,
+                                TimeSpan.Zero)));
+                });
+            });
+
+        using var client = noCurrentSeasonFactory.CreateClient(
+            new()
+            {
+                BaseAddress = new("https://localhost"),
+                AllowAutoRedirect = false,
+            });
+
+        using var response = await client.PostAsJsonAsync(
+            "/api/leaderboards/classic/scores",
+            new SubmitScoreRequest("David", 13_000));
+
+        Assert.Equal(
+            HttpStatusCode.Conflict,
+            response.StatusCode);
+
+        var problem =
+            await response.Content
+                .ReadFromJsonAsync<ProblemDetails>();
+
+        Assert.NotNull(problem);
+        Assert.Equal(409, problem.Status);
         Assert.True(
             problem.Extensions.ContainsKey("traceId"));
     }

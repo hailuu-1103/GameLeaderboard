@@ -19,4 +19,9 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\GameLeaderboard.Application\GameLeaderboard.Application.csproj" />
+      <ProjectReference Include="..\GameLeaderboard.Infrastructure\GameLeaderboard.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -1,10 +1,27 @@
 namespace GameLeaderboard.Domain.Scores;
 
 using GameLeaderboard.Domain.Common;
-using Season = GameLeaderboard.Domain.Season.Season;
+using GameLeaderboard.Domain.Season;
 
 public sealed class ScoreSubmissionPolicy
 {
+    public PlayerScore CreateFirstScore(
+        Season         season,
+        PlayerName     playerName,
+        Score          submittedScore,
+        DateTimeOffset submittedAt)
+    {
+        EnsureSeasonAcceptsScore(
+            season,
+            submittedAt);
+
+        return PlayerScore.Create(
+            season.Id,
+            playerName,
+            submittedScore,
+            submittedAt);
+    }
+
     public ScoreSubmissionDecision Submit(
         Season         season,
         PlayerScore    playerScore,
@@ -18,15 +35,24 @@ public sealed class ScoreSubmissionPolicy
                 "The player score does not belong to this season.");
         }
 
+        EnsureSeasonAcceptsScore(
+            season,
+            submittedAt);
+
+        return playerScore.Submit(
+            submittedScore,
+            submittedAt);
+    }
+
+    private static void EnsureSeasonAcceptsScore(
+        Season         season,
+        DateTimeOffset submittedAt)
+    {
         if (!season.AcceptsScoresAt(submittedAt))
         {
             throw new DomainRuleViolationException(
                 "season-not-active",
                 "Scores can only be submitted to an active season.");
         }
-
-        return playerScore.Submit(
-            submittedScore,
-            submittedAt);
     }
 }

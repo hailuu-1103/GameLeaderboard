@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <RootNamespace>GameLeaderboard.API.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,8 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameLeaderboard.Api\GameLeaderboard.Api.csproj" />
+    <ProjectReference Include="..\GameLeaderboard.API\GameLeaderboard.API.csproj" />
     <ProjectReference Include="..\GameLeaderboard.Domain\GameLeaderboard.Domain.csproj" />
+    <ProjectReference Include="..\GameLeaderboard.Application\GameLeaderboard.Application.csproj" />
+    <ProjectReference Include="..\GameLeaderboard.Infrastructure\GameLeaderboard.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
