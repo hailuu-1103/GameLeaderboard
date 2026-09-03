@@ -1,0 +1,47 @@
+name: Quality Gate
+
+        on:
+        pull_request:
+        push:
+        branches:
+        - main
+
+        permissions:
+        contents: read
+
+        jobs:
+        build-test:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout
+        uses: actions/checkout@v7
+
+        - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+        dotnet-version: "10.0.x"
+
+        - name: Restore
+        run: dotnet restore
+
+        - name: Verify formatting
+        run: >
+        dotnet format
+        --verify-no-changes
+        --no-restore
+        --severity warn
+
+        - name: Build with warnings as errors
+        run: >
+        dotnet build
+        --configuration Release
+        --no-restore
+        --warnaserror
+
+        - name: Run all tests including architecture tests
+        run: >
+        dotnet test
+        --configuration Release
+        --no-build
+        --no-restore

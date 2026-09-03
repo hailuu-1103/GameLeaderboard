@@ -4,13 +4,13 @@ namespace GameLeaderboard.API.ErrorHandling;
 
 public sealed class GlobalExceptionHandler(
     ILogger<GlobalExceptionHandler> logger,
-    IProblemDetailsService          problemDetailsService
+    IProblemDetailsService problemDetailsService
 )
     : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(
-        HttpContext       httpContext,
-        Exception         exception,
+        HttpContext httpContext,
+        Exception exception,
         CancellationToken cancellationToken
     )
     {
@@ -31,9 +31,9 @@ public sealed class GlobalExceptionHandler(
             {
                 Type =
                     "urn:game-leaderboard:errors:internal-server-error",
-                Title    = "An unexpected error occurred.",
-                Status   = StatusCodes.Status500InternalServerError,
-                Detail   = "The server could not complete the request.",
+                Title = "An unexpected error occurred.",
+                Status = StatusCodes.Status500InternalServerError,
+                Detail = "The server could not complete the request.",
                 Instance = httpContext.Request.Path,
             },
         };

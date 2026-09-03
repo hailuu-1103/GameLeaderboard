@@ -1,8 +1,8 @@
 namespace GameLeaderboard.API.Contracts.Leaderboards;
 
 public sealed record LeaderboardEntryResponse(
-    int            Rank,
-    string         PlayerName,
-    long           Score,
+    int Rank,
+    string PlayerName,
+    long Score,
     DateTimeOffset AchievedAt
 );

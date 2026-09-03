@@ -3,7 +3,7 @@ namespace GameLeaderboard.Infrastructure.Persistence.InMemory;
 using GameLeaderboard.Application.Abstractions.Persistence;
 using GameLeaderboard.Domain.Season;
 
-public class InMemoryLeaderboardQueries(InMemoryLeaderboardStore store) : ILeaderboardQueries
+internal class InMemoryLeaderboardQueries(InMemoryLeaderboardStore store) : ILeaderboardQueries
 {
     public Task<IReadOnlyList<LeaderboardEntryModel>> GetTopBySeasonAsync(
         SeasonId          seasonId,
@@ -37,6 +37,8 @@ public class InMemoryLeaderboardQueries(InMemoryLeaderboardStore store) : ILeade
 
     public Task<LeaderboardEntryModel?> GetPlayerAsync(string leaderboardId, string playerName, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         lock (store.SyncRoot)
         {
             if (!store.Leaderboards.TryGetValue(
@@ -59,7 +61,11 @@ public class InMemoryLeaderboardQueries(InMemoryLeaderboardStore store) : ILeade
                         player.Value.PlayerName.Value,
                         player.Value.BestScore.Value,
                         player.Value.AchievedAt))
-                .SingleOrDefault(kvp => kvp.PlayerName.Equals(playerName));
+                .SingleOrDefault(entry =>
+                    string.Equals(
+                        entry.PlayerName,
+                        playerName,
+                        StringComparison.OrdinalIgnoreCase));
             return Task.FromResult<LeaderboardEntryModel?>(result);
         }
     }

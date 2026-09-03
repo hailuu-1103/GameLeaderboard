@@ -1,0 +1,15 @@
+root = true
+
+[*.cs]
+charset = utf-8
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+
+dotnet_style_require_accessibility_modifiers = always:warning
+csharp_prefer_braces = true:warning
+csharp_style_namespace_declarations = file_scoped:warning
+
+dotnet_diagnostic.IDE0040.severity = warning
+dotnet_diagnostic.IDE0055.severity = warning
+dotnet_diagnostic.CA2016.severity = warning

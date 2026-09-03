@@ -4,6 +4,7 @@ using GameLeaderboard.Application.Leaderboards.GetPlayer;
 using GameLeaderboard.Application.Leaderboards.GetTop;
 using GameLeaderboard.Application.Scores.SubmitScore;
 using GameLeaderboard.Domain.Scores;
+using GameLeaderboard.Infrastructure;
 using GameLeaderboard.Infrastructure.Persistence.InMemory;
 using Scalar.AspNetCore;
 
@@ -31,43 +32,7 @@ builder.Services.AddProblemDetails(options =>
 });
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddSingleton(
-    TimeProvider.System);
-
-builder.Services.AddSingleton<
-    ScoreSubmissionPolicy>();
-
-builder.Services.AddSingleton<
-    InMemoryLeaderboardStore>();
-
-builder.Services.AddSingleton<
-    ILeaderboardRepository,
-    InMemoryLeaderboardRepository>();
-
-builder.Services.AddSingleton<
-    ISeasonRepository,
-    InMemorySeasonRepository>();
-
-builder.Services.AddSingleton<
-    IPlayerScoreRepository,
-    InMemoryPlayerScoreRepository>();
-
-builder.Services.AddSingleton<
-    ILeaderboardQueries,
-    InMemoryLeaderboardQueries>();
-
-builder.Services.AddSingleton<
-    IUnitOfWork,
-    InMemoryUnitOfWork>();
-
-builder.Services.AddScoped<
-    SubmitScoreHandler>();
-
-builder.Services.AddScoped<
-    GetTopPlayerHandler>();
-
-builder.Services.AddScoped<
-    GetPlayerHandler>();
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 

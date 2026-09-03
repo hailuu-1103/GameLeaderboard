@@ -70,8 +70,8 @@ public sealed class LeaderboardsController(SubmitScoreHandler submitScoreHandler
     [ProducesResponseType<ProblemDetails>(
         StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LeaderboardEntryResponse>> GetPlayerAsync(
-        string            leaderboardId,
-        string            name,
+        string leaderboardId,
+        string name,
         CancellationToken cancellationToken
     )
     {
@@ -127,9 +127,9 @@ public sealed class LeaderboardsController(SubmitScoreHandler submitScoreHandler
         StatusCodes.Status409Conflict)]
     public async Task<ActionResult<SubmitScoreResponse>>
         SubmitScoreAsync(
-            string                        leaderboardId,
+            string leaderboardId,
             [FromBody] SubmitScoreRequest request,
-            CancellationToken             cancellationToken
+            CancellationToken cancellationToken
         )
     {
         var result = await submitScoreHandler.HandleAsync(

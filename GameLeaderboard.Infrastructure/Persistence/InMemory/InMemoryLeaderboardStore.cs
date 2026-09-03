@@ -4,7 +4,7 @@ using GameLeaderboard.Domain.Leaderboard;
 using GameLeaderboard.Domain.Scores;
 using GameLeaderboard.Domain.Season;
 
-public sealed class InMemoryLeaderboardStore
+internal sealed class InMemoryLeaderboardStore
 {
     internal Lock SyncRoot { get; } = new();
 

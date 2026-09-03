@@ -3,7 +3,7 @@ namespace GameLeaderboard.Infrastructure.Persistence.InMemory;
 using GameLeaderboard.Application.Abstractions.Persistence;
 using GameLeaderboard.Domain.Leaderboard;
 
-public sealed class InMemoryLeaderboardRepository(
+internal sealed class InMemoryLeaderboardRepository(
     InMemoryLeaderboardStore store)
     : ILeaderboardRepository
 {

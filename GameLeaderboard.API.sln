@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLeaderboard.API", "GameLeaderboard.API\GameLeaderboard.API.csproj", "{76FEAF0D-E569-4398-8B87-8ADA68399C17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLeaderboard.API.Tests", "GameLeaderboard.Api.Tests\GameLeaderboard.Api.Tests.csproj", "{F430F879-69E7-430F-A802-33911D9CD74F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLeaderboard.Api.Tests", "GameLeaderboard.Api.Tests\GameLeaderboard.Api.Tests.csproj", "{F430F879-69E7-430F-A802-33911D9CD74F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLeaderboard.Domain", "GameLeaderboard.Domain\GameLeaderboard.Domain.csproj", "{757CF688-CFF9-417B-A7C0-482074179BCC}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLeaderboard.Application", "GameLeaderboard.Application\GameLeaderboard.Application.csproj", "{8237FCDB-AEB5-4423-85A9-D8E9835E44D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLeaderboard.Infrastructure", "GameLeaderboard.Infrastructure\GameLeaderboard.Infrastructure.csproj", "{46A6B3CF-56DF-49C2-A27C-179E9CB2FAD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLeaderboard.Architecture.Tests", "GameLeaderboard.Architecture.Tests\GameLeaderboard.Architecture.Tests.csproj", "{0992A350-1816-42D1-A17E-2E59A005CA89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,18 @@ Global
 		{46A6B3CF-56DF-49C2-A27C-179E9CB2FAD6}.Release|x64.Build.0 = Release|Any CPU
 		{46A6B3CF-56DF-49C2-A27C-179E9CB2FAD6}.Release|x86.ActiveCfg = Release|Any CPU
 		{46A6B3CF-56DF-49C2-A27C-179E9CB2FAD6}.Release|x86.Build.0 = Release|Any CPU
+		{0992A350-1816-42D1-A17E-2E59A005CA89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0992A350-1816-42D1-A17E-2E59A005CA89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0992A350-1816-42D1-A17E-2E59A005CA89}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0992A350-1816-42D1-A17E-2E59A005CA89}.Debug|x64.Build.0 = Debug|Any CPU
+		{0992A350-1816-42D1-A17E-2E59A005CA89}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0992A350-1816-42D1-A17E-2E59A005CA89}.Debug|x86.Build.0 = Debug|Any CPU
+		{0992A350-1816-42D1-A17E-2E59A005CA89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0992A350-1816-42D1-A17E-2E59A005CA89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0992A350-1816-42D1-A17E-2E59A005CA89}.Release|x64.ActiveCfg = Release|Any CPU
+		{0992A350-1816-42D1-A17E-2E59A005CA89}.Release|x64.Build.0 = Release|Any CPU
+		{0992A350-1816-42D1-A17E-2E59A005CA89}.Release|x86.ActiveCfg = Release|Any CPU
+		{0992A350-1816-42D1-A17E-2E59A005CA89}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

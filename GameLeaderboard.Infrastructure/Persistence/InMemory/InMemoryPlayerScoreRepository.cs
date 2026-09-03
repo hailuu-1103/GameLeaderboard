@@ -4,7 +4,7 @@ using GameLeaderboard.Application.Abstractions.Persistence;
 using GameLeaderboard.Domain.Scores;
 using GameLeaderboard.Domain.Season;
 
-public class InMemoryPlayerScoreRepository(InMemoryLeaderboardStore store) : IPlayerScoreRepository
+internal class InMemoryPlayerScoreRepository(InMemoryLeaderboardStore store) : IPlayerScoreRepository
 {
     public Task<PlayerScore?> GetAsync(SeasonId seasonId, PlayerId playerId, CancellationToken cancellationToken)
     {

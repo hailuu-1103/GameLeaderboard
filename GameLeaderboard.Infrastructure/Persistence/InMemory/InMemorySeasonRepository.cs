@@ -4,7 +4,7 @@ using GameLeaderboard.Application.Abstractions.Persistence;
 using GameLeaderboard.Domain.Leaderboard;
 using GameLeaderboard.Domain.Season;
 
-public class InMemorySeasonRepository(InMemoryLeaderboardStore store) : ISeasonRepository
+internal class InMemorySeasonRepository(InMemoryLeaderboardStore store) : ISeasonRepository
 {
     public Task<Season?> GetCurrentAsync(
         LeaderboardId     leaderboardId,
